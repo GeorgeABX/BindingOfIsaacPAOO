@@ -10,8 +10,6 @@ import java.util.Random;
 
 public class Fatty extends Entity {
 
-    public KeyHandler keyH;
-
     public Fatty(Game gp) {
         super(gp);
 
@@ -21,7 +19,6 @@ public class Fatty extends Entity {
         type=1;
 
         name="fatty";
-        this.keyH=gp.keyH;
         entityHeight=48;
         entityWidth=48;
         solidArea.x=9;

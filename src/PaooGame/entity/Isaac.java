@@ -24,7 +24,7 @@ public class Isaac extends Entity{
      public Isaac(Game gp){
           super(gp);
           player=gp.personaj;
-          keyH=gp.keyH;
+          keyH=KeyHandler.getInstance(gp);
           solidArea.x=16;
           solidArea.y=30;
           solidArea.height=18;

@@ -116,8 +116,8 @@ public class UI {
             spriteCounter2++;
             if(spriteCounter2>=1){
                 switch (spriteNumber2){
-                    case 1 : spriteNumber2=2;
-                    case 2 : spriteNumber2=1;
+                    case 1 : spriteNumber2=2; break;
+                    case 2 : spriteNumber2=1; break;
                 }
                 spriteCounter2=0;
             }

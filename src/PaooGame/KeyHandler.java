@@ -4,12 +4,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    public Game gp;
+    private static KeyHandler instance = null;
+
+    private Game gp;
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean shotUpPressed,shotDownPressed,shotLeftPressed,shotRightPressed,shotReleased;
 
-    public KeyHandler(Game gp) {
+    private KeyHandler(Game gp) {
         this.gp = gp;
+    }
+    public static KeyHandler getInstance(Game gp){
+        if(instance==null){
+            instance=new KeyHandler(gp);
+        }
+        return instance;
     }
 
     @Override

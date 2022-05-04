@@ -91,7 +91,8 @@ public class Game extends JPanel implements Runnable
      */
     // setam pozitia default a playerului
     public AssetSetter aSet;
-    public KeyHandler keyH = new KeyHandler(this);
+    //public KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH=KeyHandler.getInstance(this);
     public Isaac isaac;
     public int personaj=0; // 0 = isaac, default; 1 = azazel;
     public int nrPersonaje=2;
@@ -107,6 +108,7 @@ public class Game extends JPanel implements Runnable
     //UI
     public UI ui = new UI(this);
     //GAME STATE
+
     public int gameState;
     public final int playState = 1;
     public final int titleState = 0;
