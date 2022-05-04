@@ -1,0 +1,22 @@
+Usi : 
+0 - basement, caves door
+1 - itemRoom door
+2 - depths door
+3 - shop door
+4 - boss door
+
+
+0 - perete, 1 - pamant
+2,3,4,5 - basementDoor Down Up Left Right open
+6,7,8,9 - basementDoor Down Up Left Right close
+10,11,12,13 - shopDoor Down Up Left Right open
+14,15,16,17 - shopDoor Down Up Left Right close
+18,19,20,21 - itemDoor Down Up Left Right open
+22,23,24,25 - itemDoor Down Up Left Right close
+26,27,28,29 - depthsDoor Down Up Left Right open
+30,31,32,33 - depthsDoor Down Up Left Right close
+34,35 - bossDoor down open close
+36,37 trapdoor open close
+38, 39, 40 - basement_rock small si big, metal block
+41 - urn
+
