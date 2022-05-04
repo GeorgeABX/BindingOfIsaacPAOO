@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class fullfly extends Entity {
-    int a;
     BufferedImage image1, image2;
     public KeyHandler keyH;
 
