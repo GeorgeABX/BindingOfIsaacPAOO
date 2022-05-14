@@ -72,19 +72,23 @@ public class Isaac extends Entity{
           if(player==1){
                setAzazel();
           }
-          scale(35);
+          //scale(35);
      }
      public void setIsaac(){
-          entityHeight=48;
-          entityWidth=48;
+          entityHeight=48*2;
+          entityWidth=48*2;
           speed=10;
           health=6;
           maxLife=6;
           solidArea.x=16;
           solidArea.y=30;
-          solidArea.height=18;
-          solidArea.width=18;
-          //damage=
+          solidArea.height=18*2;
+          solidArea.width=18*2;
+
+          attackArea.width=42;
+          attackArea.height=28;
+
+          damage=2;
           up1=setup("/textures/isaac/isaac_up1.png");
           up2=setup("/textures/isaac/isaac_up2.png");
           up3=setup("/textures/isaac/isaac_up3.png");
@@ -97,6 +101,10 @@ public class Isaac extends Entity{
           right1=setup("/textures/isaac/isaac_right1.png");
           right2=setup("/textures/isaac/isaac_right2.png");
           right3=setup("/textures/isaac/isaac_right3.png");
+          attackUp=setup("/textures/isaac/isaac_attack_up.png");
+          attackDown=setup("/textures/isaac/isaac_attack_down.png");
+          attackLeft=setup("/textures/isaac/isaac_attack_left.png");
+          attackRight=setup("/textures/isaac/isaac_attack_right.png");
      }
      public void setAzazel(){
           entityHeight=48;
@@ -129,40 +137,55 @@ public class Isaac extends Entity{
      }
      public  void update(){
           //System.out.println("Health : "+health+"\tspeed : "+speed+"\tkeys : "+keys);
+          if(keyH.spacePressed==true){
+               attacking=true;
+
+          }
+          if(attacking==true){
+               attackMeth();
+          }
+          if (keyH.upPressed || keyH.shotUpPressed) {
+               direction = "up";
+          } else if (keyH.downPressed || keyH.shotDownPressed) {
+
+               direction = "down";
+          } else if (keyH.leftPressed || keyH.shotLeftPressed) {
+
+               direction = "left";
+          } else if (keyH.rightPressed || keyH.shotRightPressed) {
+
+               direction = "right";
+          }
           if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-               if (keyH.upPressed) {
 
-                    direction = "up";
-               } else if (keyH.downPressed) {
-
-                    direction = "down";
-               } else if (keyH.leftPressed) {
-
-                    direction = "left";
-               } else if (keyH.rightPressed) {
-
-                    direction = "right";
-               }
                //System.out.println("x : "+x/48+"\ty : "+y/48);
                //System.out.println("Speed : "+speed);
                //coliziuni pt tileuri
                collisionOn = false;
                gp.cChecker.checkTile(this);
                //coliziuni pt obiecte
-               int objIndex=gp.cChecker.checkObj(this,true);
+               int objIndex = gp.cChecker.checkObj(this, true);
                contactObject(objIndex);
                //if(objIndex!=999)
-                     //System.out.println("obj index:"+objIndex);
+               //System.out.println("obj index:"+objIndex);
                //coliziuni pt monstri
-               int monsterIndex=gp.cChecker.checkEntity(this,gp.monsters);
+               int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
                contactMonster(monsterIndex);
 
-               if (!collisionOn) {
+               if (!collisionOn && !keyH.spacePressed && !keyH.shotUpPressed && !keyH.shotDownPressed && !keyH.shotLeftPressed && !keyH.shotRightPressed) {
                     switch (direction) {
-                         case "up" : y -= speed; break;
-                         case "down" : y += speed; break;
-                         case "left" : x -= speed; break;
-                         case "right" : x += speed; break;
+                         case "up":
+                              y -= speed;
+                              break;
+                         case "down":
+                              y += speed;
+                              break;
+                         case "left":
+                              x -= speed;
+                              break;
+                         case "right":
+                              x += speed;
+                              break;
                     }
                }
                spriteCounter++;
@@ -171,8 +194,8 @@ public class Isaac extends Entity{
                          spriteNumber = 2;
                     else if (spriteNumber == 2)
                          spriteNumber = 3;
-                    else if(spriteNumber==3)
-                         spriteNumber=1;
+                    else if (spriteNumber == 3)
+                         spriteNumber = 1;
                     spriteCounter = 0;
                }
           }
@@ -184,12 +207,13 @@ public class Isaac extends Entity{
                }
           }
           pressed=gp.keyH.shotUpPressed || gp.keyH.shotDownPressed || gp.keyH.shotLeftPressed || gp.keyH.shotRightPressed;
-          if(pressed){
-               //projectile.set(x,y,direction);
+          if(pressed && !projectile.alive){
+               projectile.set(x,y,direction,true);
                gp.projectileList.add(projectile);
                //System.out.println("projectile");
-               projectile=new Tears(gp);
+              // projectile=new Tears(gp);
           }
+
 
           if(invincible){
                invincibleCounter++;
@@ -199,7 +223,59 @@ public class Isaac extends Entity{
                }
           }
           if(health<=0){
-               gp.gameState=gp.deathState;
+               gp.uiStates.setState(gp.deathState);
+          }
+     }
+     public void attackMeth(){
+          attackCounter++;
+          if(attackCounter>5 && attackCounter <25){
+//             Pastram datele initiale
+               int tempX=x;
+               int tempY=y;
+               int solidAreaWidth=solidArea.width;
+               int solidAreaHeight=solidArea.height;
+//             Ajustam coordonatele pentru directie
+               switch (direction){
+                    case "up":
+                         y-=attackArea.height;
+                         break;
+                    case "down":
+                         y+=attackArea.height;
+                         break;
+                    case "left":
+                         x-=attackArea.width;
+                         break;
+                    case "right":
+                         x+=attackArea.width;
+                         break;
+               }
+//               Modificam solid area
+               solidArea.width=attackArea.width;
+               solidArea.height=attackArea.height;
+//               Verificam coliziuni
+               int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+               damageMonster(monsterIndex);
+               x=tempX;
+               y=tempY;
+               solidArea.width=solidAreaWidth;
+               solidArea.height=solidAreaHeight;
+
+          }
+          if(attackCounter>25){
+               attackCounter=0;
+               attacking=false;
+          }
+     }
+     public void damageMonster(int i){
+          if(i!=999){
+               if(!gp.monsters[i].invincible){
+                    gp.monsters[i].health-=damage;
+                    gp.monsters[i].invincible=true;
+                    gp.monsters[i].damageReact();
+
+                    if(gp.monsters[i].health <=0)
+                         gp.monsters[i]=null;
+               }
           }
      }
      public void contactObject(int i){
@@ -334,45 +410,79 @@ public class Isaac extends Entity{
                     invincible=true;
                }
           }
+          else{
+
+          }
      }
 
      public  void draw(Graphics g){
           BufferedImage image=null;
+          int tempX=x;
+          int tempY=y;
+          int tempHeight=entityHeight;
+          int tempWidth=entityWidth;
           switch (direction) {
                case "up" : {
-                    switch (spriteNumber){
-                         case 1 -> image = up1;
-                         case 2 -> image = up2;
-                         case 3 -> image = up3;
+                    if(!attacking){
+                         switch (spriteNumber){
+                              case 1 : image = up1; break;
+                              case 2 : image = up2; break;
+                              case 3 : image = up3; break;
+                         }
                     }
+                    else{
+                         image=attackUp;
+                         tempY=tempY-gp.tileSize*2;
+                         tempHeight=tempHeight*2;
+                    }
+
                     break;
                }
                case "down" : {
-                    switch (spriteNumber){
-                         case 1 -> image = down1;
-                         case 2 -> image = down2;
-                         case 3 -> image = down3;
+                    if(!attacking){
+                         switch (spriteNumber){
+                              case 1 : image = down1; break;
+                              case 2 : image = down2; break;
+                              case 3 : image = down3; break;
+                         }
+                    }
+                    else{
+                         image=attackDown;
+                         tempHeight=tempHeight*2;
                     }
                     break;
                }
                case "left" : {
-                    switch (spriteNumber){
-                         case 1 -> image = left1;
-                         case 2 -> image = left2;
-                         case 3 -> image = left3;
+                    if(!attacking){
+                         switch (spriteNumber){
+                              case 1 : image = left1; break;
+                              case 2 : image = left2; break;
+                              case 3 : image = left3; break;
+                         }
+                    }
+                    else{
+                         image=attackLeft;
+                         tempX=tempX-gp.tileSize*2;
+                         tempWidth=tempWidth*2;
                     }
                     break;
                }
                case "right" : {
-                    switch (spriteNumber){
-                         case 1 -> image = right1;
-                         case 2 -> image = right2;
-                         case 3 -> image = right3;
+                    if(!attacking){
+                         switch (spriteNumber){
+                              case 1 : image = right1; break;
+                              case 2 : image = right2; break;
+                              case 3 : image = right3; break;
+                         }
+                    }
+                    else{
+                         image=attackRight;
+                         tempWidth=tempWidth*2;
                     }
                     break;
                }
           }
          // projectile.draw(g);
-          g.drawImage(image,x,y,entityWidth,entityHeight, null) ;
+          g.drawImage(image,tempX,tempY,tempWidth,tempHeight, null) ;
      }
 }

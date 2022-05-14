@@ -15,7 +15,7 @@ public class Fatty extends Entity {
 
         direction="down";
         speed=1;
-        health=2;
+        health=10;
         type=1;
 
         name="fatty";
@@ -154,5 +154,9 @@ public class Fatty extends Entity {
             }
             counterActiune=0;
         }
+    }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
     }
 }

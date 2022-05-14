@@ -5,212 +5,201 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     private static KeyHandler instance = null;
-
+    public boolean []keys;
     private Game gp;
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
-    public boolean shotUpPressed,shotDownPressed,shotLeftPressed,shotRightPressed,shotReleased;
+    public boolean upPressed, downPressed, leftPressed, rightPressed,escPressed,spacePressed,enterPressed;
+    public boolean shotUpPressed, shotDownPressed, shotLeftPressed, shotRightPressed, shotReleased;
 
     private KeyHandler(Game gp) {
         this.gp = gp;
+        keys=new boolean[255];
     }
-    public static KeyHandler getInstance(Game gp){
-        if(instance==null){
-            instance=new KeyHandler(gp);
+
+    public static KeyHandler getInstance(Game gp) {
+        if (instance == null) {
+            instance = new KeyHandler(gp);
         }
         return instance;
     }
-
+    public void update() {
+        upPressed = keys[KeyEvent.VK_W];
+        downPressed = keys[KeyEvent.VK_S];
+        leftPressed = keys[KeyEvent.VK_A];
+        rightPressed = keys[KeyEvent.VK_D];
+        spacePressed = keys[KeyEvent.VK_SPACE];
+        escPressed = keys[KeyEvent.VK_ESCAPE];
+        enterPressed = keys[KeyEvent.VK_ENTER];
+        shotUpPressed = keys[KeyEvent.VK_UP];
+        shotDownPressed = keys[KeyEvent.VK_DOWN];
+        shotLeftPressed = keys[KeyEvent.VK_LEFT];
+        shotRightPressed = keys[KeyEvent.VK_RIGHT];
+    }
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        // Title State
-        if (gp.gameState == gp.titleState) {
-            switch (gp.ui.titleScreenState){
-                //start menu
+        keys[code] = true;
+        if (code == KeyEvent.VK_W) {
+            upPressed = true;
+        }
+        if (code == KeyEvent.VK_S) {
+            downPressed = true;
+        }
+        if (code == KeyEvent.VK_A) {
+            leftPressed = true;
+        }
+        if (code == KeyEvent.VK_D) {
+            rightPressed = true;
+        }
+        if (code == KeyEvent.VK_UP) {
+            shotUpPressed = true;
+        }
+        if (code == KeyEvent.VK_DOWN) {
+            shotDownPressed = true;
+        }
+        if (code == KeyEvent.VK_LEFT) {
+            shotLeftPressed = true;
+        }
+        if (code == KeyEvent.VK_RIGHT) {
+            shotRightPressed = true;
+        }
+
+        if (gp.uiStates.getState() == gp.playState) {
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.uiStates.setState(gp.pauseState);
+                gp.uiStates.state.pauseCom = 1;
+                gp.uiStates.state.titleScreenState = 1;
+                gp.uiStates.state.commandNum = 1;
+            }
+        }
+        if (gp.uiStates.getState() == gp.pauseState) {
+            if (code == KeyEvent.VK_ENTER) {
+                switch (gp.uiStates.getState().pauseCom) {
+                    case 0: {
+                        break;
+                    }
+                    case 1:
+                        gp.uiStates.setState(gp.playState);
+                        break;
+                    case 2:
+                        gp.uiStates.setState(gp.titleState);
+                        break;
+                }
+            }
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.uiStates.setState(gp.playState);
+            }
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+                gp.uiStates.getState().pauseCom--;
+                if (gp.uiStates.getState().pauseCom < 0) {
+                    gp.uiStates.getState().pauseCom = gp.uiStates.getState().nrComenziPauza - 1;
+                }
+            }
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                gp.uiStates.getState().pauseCom++;
+                if (gp.uiStates.getState().pauseCom > gp.uiStates.getState().nrComenziPauza - 1) {
+                    gp.uiStates.getState().pauseCom = 0;
+                }
+            }
+        }
+        if (gp.uiStates.getState() == gp.titleState){
+            switch (gp.uiStates.state.titleScreenState){
                 case 0 : {
-                    switch (code){
-                        case KeyEvent.VK_ESCAPE -> System.exit(0);
-                        case KeyEvent.VK_SPACE -> gp.ui.titleScreenState=1;
+                    if(code == KeyEvent.VK_ESCAPE){
+                        System.exit(0);
+                    }
+                    if(code == KeyEvent.VK_SPACE){
+                        gp.uiStates.state.titleScreenState=1;
                     }
                     break;
                 }
-                //select menu
                 case 1 : {
-                    switch (code){
-                        case KeyEvent.VK_ESCAPE -> gp.ui.titleScreenState=0;
-                        case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                            gp.ui.commandNum--;
-                            if (gp.ui.commandNum < 0) {
-                                gp.ui.commandNum = gp.ui.nrComenzi - 1;
-                            }
+                    if(code == KeyEvent.VK_ESCAPE){
+                        gp.uiStates.state.titleScreenState = 0;
+                    }
+                    if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
+                        gp.uiStates.state.commandNum--;
+                        if (gp.uiStates.state.commandNum < 0) {
+                            gp.uiStates.state.commandNum = gp.uiStates.state.nrComenzi - 1;
                         }
-                        case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                            gp.ui.commandNum++;
-                            if (gp.ui.commandNum > gp.ui.nrComenzi - 1) {
-                                gp.ui.commandNum = 0;
-                            }
+                    }
+                    if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN){
+                        gp.uiStates.state.commandNum++;
+                        if (gp.uiStates.state.commandNum > gp.uiStates.state.nrComenzi - 1) {
+                            gp.uiStates.state.commandNum = 0;
                         }
-                        case KeyEvent.VK_ENTER -> {
-                            switch (gp.ui.commandNum){
-                                case 0 -> gp.ui.titleScreenState = 2;
-                                case 1 -> gp.gameState = gp.playState;
-                               // case 2 -> ;
-                            }
-
+                    }
+                    if(code == KeyEvent.VK_ENTER){
+                        switch (gp.uiStates.state.commandNum){
+                            case 0 : gp.uiStates.state.titleScreenState = 2; break;
+                            case 1 : gp.uiStates.setState(gp.playState); break;
+                            case 2 : break;
                         }
                     }
                     break;
                 }
-                //character select menu
                 case 2 : {
-                    switch (code){
-                        case KeyEvent.VK_ESCAPE -> gp.ui.titleScreenState=1;
-                        case KeyEvent.VK_A, KeyEvent.VK_LEFT -> {
-                            gp.personaj--;
-                            if (gp.personaj < 0) {
-                                gp.personaj = gp.nrPersonaje - 1;
-                            }
-                            gp.isaac.setPlayer(gp.personaj);
+                    if(code == KeyEvent.VK_ESCAPE){
+                        gp.uiStates.state.titleScreenState = 1;
+                    }
+                    if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT){
+                        gp.personaj--;
+                        if (gp.personaj < 0) {
+                            gp.personaj = gp.nrPersonaje - 1;
                         }
-                        case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> {
-                            gp.personaj++;
-                            if (gp.personaj > gp.nrPersonaje - 1) {
-                                gp.personaj = 0;
-                            }
-                            gp.isaac.setPlayer(gp.personaj);
+                        gp.isaac.setPlayer(gp.personaj);
+                    }
+                    if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
+                        gp.personaj++;
+                        if (gp.personaj > gp.nrPersonaje - 1) {
+                            gp.personaj = 0;
                         }
-                        case KeyEvent.VK_ENTER -> {
-                            gp.gameState = gp.playState;
-                            gp.setNewGame();
-                        }
+                        gp.isaac.setPlayer(gp.personaj);
+                    }
+                    if(code == KeyEvent.VK_ENTER){
+                        gp.uiStates.setState(gp.playState);
+                        gp.setNewGame();
                     }
                     break;
                 }
             }
         }
-        // Death State
-        if(gp.gameState==gp.deathState){
-            if (code == KeyEvent.VK_ESCAPE) {
-                //gp.gameState = gp.titleState;
-                //gp.ui.titleScreenState=1;
-                //gp.ui.commandNum=1;
-                gp.setNewGame();
-                gp.gameState = gp.titleState;
-                gp.ui.titleScreenState = 1;
-                gp.ui.commandNum = 1;
-            }
-        }
-        // Pause State
-        if(gp.gameState == gp.pauseState){
-            switch (code) {
-                case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                    gp.ui.pauseCom--;
-                    if (gp.ui.pauseCom < 0) {
-                        gp.ui.pauseCom = gp.ui.nrComenziPauza - 1;
-                    }
-                }
-                case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                    gp.ui.pauseCom++;
-                    if (gp.ui.pauseCom > gp.ui.nrComenziPauza - 1) {
-                        gp.ui.pauseCom = 0;
-                    }
-                }
-                case KeyEvent.VK_ENTER -> {
-                    switch (gp.ui.pauseCom){
-                        case 0 : {break;}
-                        case 1 : gp.gameState = gp.playState; break;
-                        case 2 : gp.gameState=gp.titleState; break;
-                    }
-
-                }
-            }
-        }
-        // Play State
-        if (gp.gameState == gp.playState) {
-            if (code == KeyEvent.VK_W) {
-                upPressed = true;
-            }
-            if (code == KeyEvent.VK_S) {
-                downPressed = true;
-            }
-            if (code == KeyEvent.VK_A) {
-                leftPressed = true;
-            }
-            if (code == KeyEvent.VK_D) {
-                rightPressed = true;
-            }
-            if (code == KeyEvent.VK_UP) {
-                shotUpPressed = true;
-            }
-            if (code == KeyEvent.VK_DOWN) {
-                shotDownPressed = true;
-            }
-            if (code == KeyEvent.VK_LEFT) {
-                shotLeftPressed = true;
-            }
-            if (code == KeyEvent.VK_RIGHT) {
-                shotRightPressed = true;
-            }
-            if (code == KeyEvent.VK_ESCAPE) {
-                //gp.gameState = gp.titleState;
-                //gp.ui.titleScreenState=1;
-                //gp.ui.commandNum=1;
-                gp.gameState = gp.pauseState;
-                gp.ui.pauseCom = 1;
-                gp.ui.titleScreenState=1;
-                gp.ui.commandNum=1;
-            }
-            // testare
-            switch (code) {
-                case KeyEvent.VK_NUMPAD7 -> gp.nivelTerminat = 0;
-                case KeyEvent.VK_NUMPAD8 -> gp.nivelTerminat = 1;
-                case KeyEvent.VK_NUMPAD9 -> {
-                    for (int i = 0; i < gp.monsters.length; i++) gp.monsters[i] = null;
-                }
-                case KeyEvent.VK_NUMPAD4 -> gp.isaac.coins = 10;
-                /*
-                case KeyEvent.VK_NUMPAD5 ->
-                case KeyEvent.VK_1 ->
-                 */
-            }
-        }
     }
 
-        @Override
-        public void keyReleased (KeyEvent e){
-            int code = e.getKeyCode();
-            if (code == KeyEvent.VK_W) {
-                upPressed = false;
-            }
-            if (code == KeyEvent.VK_S) {
-                downPressed = false;
-            }
-            if (code == KeyEvent.VK_A) {
-                leftPressed = false;
-            }
-            if (code == KeyEvent.VK_D) {
-                rightPressed = false;
-            }
-            if (code == KeyEvent.VK_UP) {
-                shotUpPressed = false;
-                shotReleased=true;
-            }
-            if (code == KeyEvent.VK_DOWN) {
-                shotDownPressed = false;
-                shotReleased=true;
-            }
-            if (code == KeyEvent.VK_LEFT) {
-                shotLeftPressed = false;
-                shotReleased=true;
-            }
-            if (code == KeyEvent.VK_RIGHT) {
-                shotRightPressed = false;
-                shotReleased=true;
-            }
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        keys[code]=false;
+        if (code == KeyEvent.VK_W) {
+            upPressed = false;
+        }
+        if (code == KeyEvent.VK_S) {
+            downPressed = false;
+        }
+        if (code == KeyEvent.VK_A) {
+            leftPressed = false;
+        }
+        if (code == KeyEvent.VK_D) {
+            rightPressed = false;
+        }
+        if (code == KeyEvent.VK_UP) {
+            shotUpPressed = false;
+            shotReleased = true;
+        }
+        if (code == KeyEvent.VK_DOWN) {
+            shotDownPressed = false;
+            shotReleased = true;
+        }
+        if (code == KeyEvent.VK_LEFT) {
+            shotLeftPressed = false;
+            shotReleased = true;
+        }
+        if (code == KeyEvent.VK_RIGHT) {
+            shotRightPressed = false;
+            shotReleased = true;
         }
     }
+}

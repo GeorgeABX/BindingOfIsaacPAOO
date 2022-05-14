@@ -17,7 +17,7 @@ public class charger extends Entity {
 
         direction="down";
         speed=3;
-        health=2;
+        health=4;
         type=1;
         name="charger";
         solidArea.x=9;
@@ -125,5 +125,9 @@ public class charger extends Entity {
             }
             counterActiune=0;
         }
+    }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
     }
 }

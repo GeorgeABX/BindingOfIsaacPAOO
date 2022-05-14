@@ -8,17 +8,30 @@ public class Projectile extends Entity{
         super(gp);
     }
 
-    public void set(int x, int y, String direction){
-        this.x=x;
-        this.y=y;
+    public void set(int x, int y, String direction, boolean alive){
+        this.x=x+80/2;
+        this.y=y+96/2;
         this.direction=direction;
+        this.alive=alive;
+        this.health=this.maxLife;
     }
     public void update(){
+        int monsterIndex=gp.cChecker.checkEntity(this,gp.monsters);
+        if(monsterIndex!=999){
+            gp.isaac.damageMonster(monsterIndex);
+            alive=false;
+        }
+
         switch (direction) {
-            case "up" -> y -= speed;
-            case "down" -> y += speed;
-            case "left" -> x -= speed;
-            case "right" -> x += speed;
+            case "up" : y -= speed; break;
+            case "down" : y += speed; break;
+            case "left" : x -= speed; break;
+            case "right" : x += speed; break;
+        }
+
+        health--;
+        if(health<=0){
+            alive=false;
         }
     }
 }

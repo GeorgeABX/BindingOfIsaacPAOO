@@ -17,7 +17,7 @@ public class fullfly extends Entity {
 
         direction="down";
         speed=1;
-        health=3;
+        health=2;
         type=1;
 
         name="full_fly";
@@ -75,5 +75,9 @@ public class fullfly extends Entity {
             }
             counterActiune=0;
         }
+    }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
     }
 }

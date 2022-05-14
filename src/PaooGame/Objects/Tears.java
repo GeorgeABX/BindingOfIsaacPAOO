@@ -20,7 +20,8 @@ public class Tears extends Projectile {
     }
     public void setDefault() {
         speed = 10;
-        attack = 2;
+        damage=2;
+        maxLife=50;
         solidArea.x=0;
         solidArea.y=0;
         solidArea.height=15;
@@ -32,7 +33,7 @@ public class Tears extends Projectile {
     public void getImage(){
         image=setup("/textures/isaac/tear.png");
     }
-    public void update(){
+   /* public void update(){
         upPressed=gp.keyH.shotUpPressed;
         downPressed=gp.keyH.shotDownPressed;
         leftPressed=gp.keyH.shotLeftPressed;
@@ -97,11 +98,12 @@ public class Tears extends Projectile {
                     break;
             }
         }
-    }
+    }*/
     public void draw(Graphics g){
-        if(shot){
-            g.drawImage(image,bullet.x,bullet.y,bullet.width*2,bullet.height*2, null) ;
-
+        if((x<=1300 && x>=250) && (y<=700 && y>=110)) {
+            if (alive) {
+                g.drawImage(image, x, y, image.getWidth() * 2, image.getHeight() * 2, null);
+            }
         }
     }
 

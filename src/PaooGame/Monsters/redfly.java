@@ -76,4 +76,8 @@ public class redfly extends Entity {
             counterActiune=0;
         }
     }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
+    }
 }

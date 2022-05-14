@@ -17,7 +17,7 @@ public class gaper extends Entity {
 
         direction="down";
         speed=3;
-        health=2;
+        health=6;
         type=1;
         name="gaper";
         entityHeight=34*2;
@@ -118,5 +118,9 @@ public class gaper extends Entity {
             }
             counterActiune=0;
         }
+    }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
     }
 }

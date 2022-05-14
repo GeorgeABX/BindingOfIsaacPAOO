@@ -22,27 +22,33 @@ public class Entity {
     public int maxLife;
     public int maxMaxLife;
     public int type; // 0 - player, 1 - monster
-    public int attack;
+    public int damage;
     public Projectile projectile;
 
     public boolean invincible=false;
-    public int invincibleCounter=0;
+    public boolean attacking=false;
+    public boolean collisionOn=false;
+    public boolean alive;
 
     public int entityWidth;
     public int entityHeight;
 
-    public  BufferedImage up1,up2,up3,down1,down2,down3,left1,left2,left3,right1,right2,right3;
-    public  BufferedImage image;
-    public  String direction;
+    public BufferedImage up1,up2,up3,down1,down2,down3,left1,left2,left3,right1,right2,right3;
+    public BufferedImage attackUp, attackDown, attackLeft, attackRight;
+    public BufferedImage image;
+    public String direction;
     //Counter
-    public  int spriteCounter=0;
-    public  int spriteNumber=1;
-    public  int stopCounter=0;
-    public  int counterActiune=0;
+    public int invincibleCounter=0;
+    public int spriteCounter=0;
+    public int spriteNumber=1;
+    public int stopCounter=0;
+    public int counterActiune=0;
+    public int attackCounter=0;
 
-    public  Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle solidArea = new Rectangle(0,0,48,48);
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public  boolean collisionOn=false;
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
+
 
     public Entity(Game gp){
         this.gp=gp;
@@ -108,9 +114,8 @@ public class Entity {
         entityHeight+=i;
         entityWidth+=i;
     }
-    public void setAction(){
-
-    }
+    public void setAction(){}
+    public void damageReact(){}
     public void update() {
         setAction();
         collisionOn = false;
@@ -125,7 +130,7 @@ public class Entity {
 
 
         if(this.type==1 && contactPlayer){
-            if(gp.isaac.invincible==false){
+            if(!gp.isaac.invincible){
                 //putem da dmg
                 gp.isaac.health-=1;
                 gp.isaac.invincible=true;
@@ -147,6 +152,13 @@ public class Entity {
             else if (spriteNumber == 2)
                 spriteNumber = 1;
             spriteCounter = 0;
+        }
+        if(invincible){
+            invincibleCounter++;
+            if(invincibleCounter > 40){
+                invincible=false;
+                invincibleCounter=0;
+            }
         }
     }
 }

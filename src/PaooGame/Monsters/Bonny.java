@@ -17,7 +17,7 @@ public class Bonny extends Entity {
 
         direction="down";
         speed=3;
-        health=2;
+        health=6;
         type=1;
 
         name="bonny";
@@ -103,5 +103,9 @@ public class Bonny extends Entity {
             }
             counterActiune=0;
         }
+    }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
     }
 }

@@ -17,7 +17,7 @@ public class knight extends Entity {
 
         direction="down";
         speed=3;
-        health=2;
+        health=6;
         type=1;
 
         name="knight";
@@ -79,5 +79,9 @@ public class knight extends Entity {
             }
             counterActiune=0;
         }
+    }
+    public void damageReact(){
+        counterActiune=0;
+        direction=gp.isaac.direction;
     }
 }

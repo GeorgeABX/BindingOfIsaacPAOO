@@ -2,6 +2,7 @@ package PaooGame;
 
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
+import PaooGame.States.*;
 import PaooGame.Tiles.Tile;
 import PaooGame.entity.Entity;
 import PaooGame.entity.Isaac;
@@ -109,11 +110,13 @@ public class Game extends JPanel implements Runnable
     public UI ui = new UI(this);
     //GAME STATE
 
-    public int gameState;
+    public State titleState,playState,deathState,pauseState;
+    public UIStates uiStates;
+    /*public int gameState;
     public final int playState = 1;
     public final int titleState = 0;
     public final int pauseState = 2;
-    public final int deathState = 3;
+    public final int deathState = 3;*/
 
     public Entity []obj = new Entity[100];
     public Entity []monsters = new Entity[100];
@@ -150,6 +153,11 @@ public class Game extends JPanel implements Runnable
     public void setupGame(){
         aSet.setMonsters();
         aSet.setObjects();
+        //Instantiem starile jocului
+        playState=new PlayState(this);
+        pauseState=new PauseState(this);
+        deathState=new DeathState(this);
+        titleState=new TitleState(this);
     }
     private void InitGame()
     {
@@ -167,8 +175,8 @@ public class Game extends JPanel implements Runnable
         isaac=new Isaac(this);
         setupGame();
         // SET GAME STATE
-        gameState = titleState;
-
+//        gameState = titleState;
+        uiStates=new UIStates(this);
         Assets.Init();
     }
     /*! \fn public void run()
@@ -273,32 +281,8 @@ public class Game extends JPanel implements Runnable
     {
         wnd.GetCanvas().setFocusable(false);
         wnd.GetCanvas().setFocusable(true);
-
-        if(gameState == playState){
-            isaac.update();
-            monstersNull=true;
-            for (int i =0;i<monsters.length; i++){
-                if(monsters[i]!=null){
-                    monsters[i].update();
-                }
-            }
-            for (int i =0;i<monsters.length; i++){
-                if(monsters[i]!=null){
-                    monstersNull=false;
-                    break;
-                }
-            }
-            if(monstersNull==true)
-                nivelTerminat=1;
-            //isaac.projectile.update();
-            for (int i =0;i<projectileList.size(); i++){
-                projectileList.get(i).update();
-                /*if(projectileList.get(i)!=null){
-                    monsters[i].update();
-                }*/
-            }
-           // System.out.println("Nive : "+nivel + "\tCamera : "+camera);
-        }
+        keyH.update();
+        uiStates.state.update();
     }
 
     /*! \fn private void Draw()
@@ -332,37 +316,8 @@ public class Game extends JPanel implements Runnable
             /// Se sterge ce era
         g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
 
-        //TITLE SCREEN
-        if(gameState==titleState){
-            ui.draw(g);
-        }
-        else{
+        uiStates.state.draw(g);
 
-            // Tiles
-            tileM.draw(g);
-            // Objects
-            for(int i = 0; i < obj.length;i++){
-                if(obj[i]!=null){
-                    obj[i].draw(g);
-                }
-            }
-
-            //monstri
-            for(int i = 0; i < monsters.length;i++){
-                if(monsters[i]!=null){
-                    monsters[i].draw(g);
-                }
-            }
-            for (int i =0;i<projectileList.size(); i++) {
-                projectileList.get(i).draw(g);
-            }
-
-            // Personajul
-            isaac.draw(g);
-            ui.draw(g);
-        }
-
-       // System.out.print("\n"+mapWithTiles[isaac.x/48][isaac.y/48].IsSolid());
             // end operatie de desenare
             /// Se afiseaza pe ecran
         bs.show();

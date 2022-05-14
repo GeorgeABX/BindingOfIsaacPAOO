@@ -47,7 +47,7 @@ public class UI {
         this.keys=gp.isaac.keys;
         this.coins=gp.isaac.coins;
         g.setFont(isaacFont);
-        if(gp.gameState==gp.titleState){
+        /*if(gp.gameState==gp.titleState){
             drawTitleScreen();
         }
         if(gp.gameState==gp.playState){
@@ -58,7 +58,7 @@ public class UI {
         }
         if(gp.gameState==gp.deathState){
             drawDeathScreen();
-        }
+        }*/
     }
     public void drawDeathScreen(){
         drawGameUI();
