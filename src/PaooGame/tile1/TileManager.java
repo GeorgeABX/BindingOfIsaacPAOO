@@ -36,6 +36,15 @@ public class TileManager {
         loadMap("/maps/basement1.txt");
 
     }
+    public BufferedImage setupStr(String path){
+        BufferedImage rez=null;
+        try {//textures/tiles/itemDoorDown.png
+            rez = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rez;
+    }
     public BufferedImage setup(String path){
         BufferedImage rez=null;
         try {//textures/tiles/itemDoorDown.png
@@ -206,7 +215,7 @@ public class TileManager {
         drawBackground("basement");
         switch (gp.camera){
             case 0 : {
-                image=gp.ui.setup("/textures/hud/tutorial.png");
+                image=setupStr("/textures/hud/tutorial.png");
                 int x=gp.actualScreenWidth/2-image.getWidth();
                 int y=gp.actualScreenHeight/2-image.getHeight();
                 g.drawImage(image,x,y,image.getWidth()*2,image.getHeight()*2,null);
@@ -633,4 +642,6 @@ public class TileManager {
         xStanga=48*4;
         xDreapta=26*48+38;
     }
+
+
 }

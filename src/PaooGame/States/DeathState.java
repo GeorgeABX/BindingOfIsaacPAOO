@@ -17,7 +17,7 @@ public class DeathState extends State{
             gp.setNewGame();
             gp.uiStates.setState(gp.titleState);
             titleScreenState = 1;
-            commandNum = 1;
+            commandNum = 0;
         }
     }
 

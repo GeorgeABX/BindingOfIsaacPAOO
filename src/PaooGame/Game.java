@@ -1,9 +1,7 @@
 package PaooGame;
 
 import PaooGame.GameWindow.GameWindow;
-import PaooGame.Graphics.Assets;
 import PaooGame.States.*;
-import PaooGame.Tiles.Tile;
 import PaooGame.entity.Entity;
 import PaooGame.entity.Isaac;
 import PaooGame.tile1.AssetSetter;
@@ -12,9 +10,10 @@ import PaooGame.tile1.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.sql.*;
 /*! \class Game
     \brief Clasa principala a intregului proiect. Implementeaza Game - Loop (Update -> Draw)
 
@@ -77,9 +76,6 @@ public class Game extends JPanel implements Runnable
 
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
 
-
-    private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
-
     /*! \fn public Game(String title, int width, int height)
         \brief Constructor de initializare al clasei Game.
 
@@ -106,8 +102,6 @@ public class Game extends JPanel implements Runnable
 
     public TileManager tileM;
     public CheckCollision cChecker=new CheckCollision(this);
-    //UI
-    public UI ui = new UI(this);
     //GAME STATE
 
     public State titleState,playState,deathState,pauseState;
@@ -122,6 +116,9 @@ public class Game extends JPanel implements Runnable
     public Entity []monsters = new Entity[100];
 
     public ArrayList<Entity> projectileList=new ArrayList<>();
+
+
+    public Connection c = null;
 
     public Game(String title, int width, int height)
     {
@@ -150,6 +147,55 @@ public class Game extends JPanel implements Runnable
         tileM.drawBasement();
         aSet.setObjects();
     }
+    public void setDataBase(){
+        Statement s = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:bazadedate.db");
+//            c.setAutoCommit(false);
+            s=c.createStatement();
+            String sql = null;
+            try {
+                sql = "CREATE TABLE \"player\" (\n" +
+                        "\t\"ID\"\tINTEGER,\n" +
+                        "\t\"x\"\tINTEGER,\n" +
+                        "\t\"y\"\tINTEGER,\n" +
+                        "\t\"speed\"\tINTEGER,\n" +
+                        "\t\"health\"\tINTEGER,\n" +
+                        "\t\"maxLife\"\tINTEGER,\n" +
+                        "\t\"keys\"\tINTEGER,\n" +
+                        "\t\"coins\"\tINTEGER,\n" +
+                        "\t\"nivel\"\tINTEGER,\n" +
+                        "\t\"camera\"\tINTEGER,\n" +
+                        "\t\"nivelTerminat\"\tINTEGER,\n" +
+                        "\tPRIMARY KEY(\"ID\")\n" +
+                        ");";
+                System.out.println("TABLE CREATE PLAYER" + s.execute(sql));
+            }
+            catch (Exception e){
+//                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                System.out.println("Tabela player a fost deja creata");
+            }
+            try {
+                sql = "CREATE TABLE \"monstri\" (\n" +
+                        "\t\"ID\"\tINTEGER,\n" +
+                        "\t\"x\"\tINTEGER,\n" +
+                        "\t\"y\"\tINTEGER,\n" +
+                        "\t\"health\"\tINTEGER,\n" +
+                        "\t\"name\"\tTEXT,\n" +
+                        "\tPRIMARY KEY(\"ID\")\n" +
+                        ");";
+                System.out.println("TABLE CREATE PLAYER" + s.execute(sql));
+            }
+            catch (Exception e){
+                // System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                System.out.println("Tabela monstri a fost deja creata");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void setupGame(){
         aSet.setMonsters();
         aSet.setObjects();
@@ -159,25 +205,30 @@ public class Game extends JPanel implements Runnable
         deathState=new DeathState(this);
         titleState=new TitleState(this);
     }
-    private void InitGame()
-    {
-        tileSize=48;
+    private void InitGame() {
+        tileSize = 48;
         //cols=15;
         //rows=13;
         wnd = new GameWindow("The binding of isaac", screenWidth, screenHeight);
 
-            /// Este construita fereastra grafica.
+        /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
-            /// Se incarca toate elementele grafice (dale)
+        /// Se incarca toate elementele grafice (dale)
         wnd.setKeyH(keyH);
-        aSet=new AssetSetter(this);
-        tileM=new TileManager(this);
-        isaac=new Isaac(this);
+
+        setDataBase();
+
+        aSet = new AssetSetter(this);
+        tileM = new TileManager(this);
+        isaac = new Isaac(this);
+        //isaac.save();
         setupGame();
         // SET GAME STATE
 //        gameState = titleState;
-        uiStates=new UIStates(this);
-        Assets.Init();
+        uiStates = new UIStates(this);
+        // DATA BASE
+
+
     }
     /*! \fn public void run()
         \brief Functia ce va rula in thread-ul creat.

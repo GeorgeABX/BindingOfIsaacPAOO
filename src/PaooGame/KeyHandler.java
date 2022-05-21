@@ -66,8 +66,8 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_RIGHT) {
             shotRightPressed = true;
         }
-
-        if (gp.uiStates.getState() == gp.playState) {
+        // PLAY STATE
+        if (gp.uiStates.state == gp.playState) {
             if (code == KeyEvent.VK_ESCAPE) {
                 gp.uiStates.setState(gp.pauseState);
                 gp.uiStates.state.pauseCom = 1;
@@ -75,47 +75,53 @@ public class KeyHandler implements KeyListener {
                 gp.uiStates.state.commandNum = 1;
             }
         }
-        if (gp.uiStates.getState() == gp.pauseState) {
+        // PAUSE STATE
+        if (gp.uiStates.state == gp.pauseState) {
             if (code == KeyEvent.VK_ENTER) {
-                switch (gp.uiStates.getState().pauseCom) {
+                switch (gp.uiStates.state.pauseCom) {
+                    // OPTIONS
                     case 0: {
                         break;
                     }
+                    // RESUME
                     case 1:
                         gp.uiStates.setState(gp.playState);
                         break;
+                    // EXIT - salvam
                     case 2:
                         gp.uiStates.setState(gp.titleState);
+                        gp.isaac.save();
+                        gp.uiStates.state.commandNum = 1;
+                        gp.uiStates.state.titleScreenState = 0;
                         break;
                 }
             }
-            if (code == KeyEvent.VK_ESCAPE) {
-                gp.uiStates.setState(gp.playState);
-            }
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                gp.uiStates.getState().pauseCom--;
-                if (gp.uiStates.getState().pauseCom < 0) {
-                    gp.uiStates.getState().pauseCom = gp.uiStates.getState().nrComenziPauza - 1;
+                gp.uiStates.state.pauseCom--;
+                if (gp.uiStates.state.pauseCom < 0) {
+                    gp.uiStates.state.pauseCom = gp.uiStates.state.nrComenziPauza - 1;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                gp.uiStates.getState().pauseCom++;
-                if (gp.uiStates.getState().pauseCom > gp.uiStates.getState().nrComenziPauza - 1) {
-                    gp.uiStates.getState().pauseCom = 0;
+                gp.uiStates.state.pauseCom++;
+                if (gp.uiStates.state.pauseCom > gp.uiStates.state.nrComenziPauza - 1) {
+                    gp.uiStates.state.pauseCom = 0;
                 }
             }
         }
-        if (gp.uiStates.getState() == gp.titleState){
+        if (gp.uiStates.state == gp.titleState){
             switch (gp.uiStates.state.titleScreenState){
+                // ECRAN PRINCIPAL
                 case 0 : {
                     if(code == KeyEvent.VK_ESCAPE){
                         System.exit(0);
                     }
-                    if(code == KeyEvent.VK_SPACE){
+                    if(code == KeyEvent.VK_ENTER){
                         gp.uiStates.state.titleScreenState=1;
                     }
                     break;
                 }
+                // ECRAN MENIU
                 case 1 : {
                     if(code == KeyEvent.VK_ESCAPE){
                         gp.uiStates.state.titleScreenState = 0;
@@ -134,13 +140,17 @@ public class KeyHandler implements KeyListener {
                     }
                     if(code == KeyEvent.VK_ENTER){
                         switch (gp.uiStates.state.commandNum){
+                            // NEW GAME
                             case 0 : gp.uiStates.state.titleScreenState = 2; break;
-                            case 1 : gp.uiStates.setState(gp.playState); break;
+                            // CONTINUE / LOAD GAME
+                            case 1 : gp.uiStates.setState(gp.playState); gp.isaac.load(); break;
+                            // OPTIONS x
                             case 2 : break;
                         }
                     }
                     break;
                 }
+                // ECRAN SELECTIE CARACTER
                 case 2 : {
                     if(code == KeyEvent.VK_ESCAPE){
                         gp.uiStates.state.titleScreenState = 1;

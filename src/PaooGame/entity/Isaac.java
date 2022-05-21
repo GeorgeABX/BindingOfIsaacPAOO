@@ -3,7 +3,8 @@ package PaooGame.entity;
 import PaooGame.Game;
 import PaooGame.KeyHandler;
 import PaooGame.Objects.*;
-import PaooGame.Tiles.Tile;
+import PaooGame.States.PlayState;
+
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,10 +12,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
+import java.sql.*;
 
 
 public class Isaac extends Entity{
      KeyHandler keyH;
+     Graphics g;
      int player;
      public int keys;
      public int coins;
@@ -287,6 +290,7 @@ public class Isaac extends Entity{
                     case "key" ->{
                          keys++;
                          gp.obj[i]=null;
+                         gp.aSet.initialBsm[gp.nivel][gp.camera]=null;
                     }
                     case "coin" -> {
                          coins++;
@@ -416,6 +420,7 @@ public class Isaac extends Entity{
      }
 
      public  void draw(Graphics g){
+          this.g=g;
           BufferedImage image=null;
           int tempX=x;
           int tempY=y;
@@ -484,5 +489,69 @@ public class Isaac extends Entity{
           }
          // projectile.draw(g);
           g.drawImage(image,tempX,tempY,tempWidth,tempHeight, null) ;
+     }
+     public void save(){
+          Statement s = null;
+          Connection c = gp.c;
+          // SALVAM INFORMATII DESPRE CARACTER
+          try{
+               s=c.createStatement();
+               String sql="UPDATE player SET x = " + x + " WHERE ID = 1";
+               System.out.println("UPDATE X " + s.executeUpdate(sql));
+               sql="UPDATE player SET y = " + y + " WHERE ID = 1";
+               System.out.println("UPDATE Y " + s.executeUpdate(sql));
+               sql="UPDATE player SET speed = " + speed + " WHERE ID = 1";
+               System.out.println("UPDATE SPEED" + s.executeUpdate(sql));
+               sql="UPDATE player SET health = " + health + " WHERE ID = 1";
+               System.out.println("UPDATE HEALTH " + s.executeUpdate(sql));
+               sql="UPDATE player SET maxLife = " + maxLife + " WHERE ID = 1";
+               System.out.println("UPDATE maxLife " + s.executeUpdate(sql));
+               sql="UPDATE player SET keys = " + keys + " WHERE ID = 1";
+               System.out.println("UPDATE HEALTH " + s.executeUpdate(sql));
+               sql="UPDATE player SET coins = " + coins + " WHERE ID = 1";
+               System.out.println("UPDATE maxLife " + s.executeUpdate(sql));
+               sql="UPDATE player SET nivel = " + gp.nivel + " WHERE ID = 1";
+               System.out.println("UPDATE Nivel " + s.executeUpdate(sql));
+               sql="UPDATE player SET camera = " + gp.camera + " WHERE ID = 1";
+               System.out.println("UPDATE Camera " + s.executeUpdate(sql));
+               sql="UPDATE player SET nivelTerminat = " + gp.nivelTerminat + " WHERE ID = 1";
+               System.out.println("UPDATE nivelTerminat " + s.executeUpdate(sql));
+
+          } catch (Exception e) {
+               e.printStackTrace();
+          }
+          // SALVAM INFORMATII DESPRE MONSTRI SI OBIECTE
+          int i;
+          for(i = 0 ;i<gp.monsters.length;i++){
+
+          }
+     }
+
+     public void load(){
+          Statement s = null;
+          Connection c = gp.c;
+          String sql;
+          try{
+               s=c.createStatement();
+               sql = "SELECT * FROM player WHERE ID = 1;";
+               ResultSet rs = s.executeQuery(sql);
+               if (rs.getFloat("x") != 0) {
+                    x=rs.getInt("x");
+                    y=rs.getInt("y");
+                    speed=rs.getInt("speed");
+                    health=rs.getInt("health");
+                    maxLife=rs.getInt("maxLife");
+                    keys=rs.getInt("keys");
+                    coins=rs.getInt("coins");
+                    gp.nivel=rs.getInt("nivel");
+                    gp.camera=rs.getInt("camera");
+                    gp.nivelTerminat=rs.getInt("nivelTerminat");
+
+               }
+          } catch (Exception e) {
+               e.printStackTrace();
+          }
+          gp.aSet.setObjects();
+          gp.tileM.draw(g);
      }
 }

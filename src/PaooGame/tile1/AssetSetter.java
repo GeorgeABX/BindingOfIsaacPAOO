@@ -5,14 +5,23 @@ import PaooGame.Game;
 import PaooGame.Objects.*;
 import PaooGame.entity.Entity;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class AssetSetter {
 
     public Game gp;
-
+    public Entity [][]initialBsm=new Entity[20][20];
     public AssetSetter(Game gp){
         this.gp=gp;
+        setInitObj();
     }
-
+    public void setInitObj(){
+        int k=-1;
+        initialBsm[1][++k]=setupObj("key",5*48+30,gp.actualScreenHeight/2-50);
+        initialBsm[1][++k]=setupObj("grey_chest",25*48+10,gp.actualScreenHeight/2-27);
+    }
     public void setMonsters(){
         /*gp.monsters[0]=new Fatty(gp);
         gp.monsters[0].x=20*gp.tileSize;
@@ -30,9 +39,31 @@ public class AssetSetter {
         for (int i = 0; i < gp.monsters.length; i++) {
             gp.monsters[i]=null;
         }
+        Statement s = null;
+        Connection c = gp.c;
+        String sql;
+        try {
+            s = c.createStatement();
+            sql="DELETE FROM monstri";
+            s.executeUpdate(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         switch (gp.nivel){
             case 0 -> setBasement();
             case 1 -> setCaves();
+        }
+        try {
+            s = c.createStatement();
+            for (int i = 0; i < gp.monsters.length; i++) {
+                if(gp.monsters[i]!=null){
+                    System.out.println("un monstru");
+                    sql="INSERT INTO monstri (ID, x, y , health, name) VALUES ("+i+","+gp.monsters[i].x+","+gp.monsters[i].y +","+gp.monsters[i].health+","+gp.monsters[i].name+")";
+                    s.executeUpdate(sql);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     public void setCaves(){
@@ -65,8 +96,13 @@ public class AssetSetter {
             }
             case 1 ->{
                 int k=-1;
-                gp.obj[++k]=setupObj("key",5*48+30,gp.actualScreenHeight/2-50);
-                gp.obj[++k]=setupObj("grey_chest",25*48+10,gp.actualScreenHeight/2-27);
+                for(int j=0;j<initialBsm[gp.camera].length;j++){
+                    if(initialBsm[gp.camera]!=null){
+                        gp.obj[++k]=initialBsm[gp.camera][j];
+                    }
+                }
+             //   gp.obj[++k]=setupObj("key",5*48+30,gp.actualScreenHeight/2-50);
+           //     gp.obj[++k]=setupObj("grey_chest",25*48+10,gp.actualScreenHeight/2-27);
                 for(int i=0;i<13-3;i++){
                     gp.obj[++k]=setupObj("spike",7*48,(i+3)*48+i*7);
                     gp.obj[++k]=setupObj("spike",24*48,(i+3)*48+i*7);
