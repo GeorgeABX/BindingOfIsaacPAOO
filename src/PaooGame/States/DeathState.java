@@ -29,6 +29,6 @@ public class DeathState extends State{
         image=setup("/textures/menu_textures/deathScreen.png");
         int x=0;
         int y=0;
-        g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
     }
 }

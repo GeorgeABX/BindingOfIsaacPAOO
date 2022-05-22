@@ -155,10 +155,8 @@ public class TileManager {
     public void drawBackground(String name){
         background=setup(name+"_final");
         g.drawImage(background,0,-20,1551,873,null);
-        //g.drawImage(background,0,0,1920,1080,null);
     }
     public boolean verificaSus(int camera){
-        //System.out.println("x = "+x+"\ty = "+y);
         if(gp.nivelTerminat==1)
             if(x>=708 && x<=762 && y>=66 && y <=90){
                 System.out.println("teleport sus");
@@ -169,7 +167,6 @@ public class TileManager {
         return false;
     }
     public boolean verificaJos(int camera){
-        //System.out.println("x = "+x+"\ty = "+y);
         if(gp.nivelTerminat==1)
             if(x>=726 && x<=762 && y>=628){
                 System.out.println("teleport jos");
@@ -180,7 +177,6 @@ public class TileManager {
         return false;
     }
     public boolean verificaStanga(int camera){
-        //System.out.println("x = "+x+"\ty = "+y);
         if(gp.nivelTerminat==1)
             if(x<=235 && y>=340 && y <=400){
                 System.out.println("teleport stanga");
@@ -191,7 +187,6 @@ public class TileManager {
         return false;
     }
     public boolean verificaDreapta(int camera){
-        //System.out.println("x = "+x+"\ty = "+y);
         if(gp.nivelTerminat==1)
             if(x>=1215 && y>=340 && y <=400){
                 System.out.println("teleport dreapta");
@@ -594,24 +589,6 @@ public class TileManager {
             }
             br.close();
         }catch (Exception e){
-        }
-    }
-    public void drawTiles(){
-        int col=0;
-        int row=0;
-        int x=0;
-        int y=0;
-        while(col<15 &&row<13){
-            int tileNum=mapTileNum[col][row];
-            //g.drawImage(tile[tileNum].image,x,y,tile[tileNum].image.getWidth(),tile[tileNum].image.getHeight(),null);
-            col++;
-            x+=48;
-            if(col==15){
-                col=0;
-                x=0;
-                row++;
-                y+=48;
-            }
         }
     }
     public int getMiddleOrizontala(int i){

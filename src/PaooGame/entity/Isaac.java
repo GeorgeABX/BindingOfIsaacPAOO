@@ -9,7 +9,7 @@ import PaooGame.States.PlayState;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 import java.util.Random;
 import java.sql.*;
@@ -520,14 +520,36 @@ public class Isaac extends Entity{
           } catch (Exception e) {
                e.printStackTrace();
           }
-          // SALVAM INFORMATII DESPRE MONSTRI SI OBIECTE
-          int i;
-          for(i = 0 ;i<gp.monsters.length;i++){
+          try {
+               BufferedWriter bw = new BufferedWriter(new FileWriter("nivelComplet.txt"));
+               for(int i=0;i<gp.tileM.nivComplet.length;i++){
+                    bw.write(String.valueOf(gp.tileM.nivComplet[i]));
+                    bw.newLine();
+               }
+               System.out.println("Am salvat statusul levelului ");
 
+               bw.close();
+
+          } catch (IOException e) {
+               e.printStackTrace();
           }
      }
 
      public void load(){
+          try {
+               BufferedReader br = new BufferedReader(new FileReader("nivelComplet.txt"));
+               int rez;
+               for(int i=0;i<gp.tileM.nivComplet.length;i++){
+                    rez = Integer.parseInt(br.readLine());
+                    gp.tileM.nivComplet[i]=rez;
+               }
+
+               br.close();
+          } catch (Exception e) {
+               e.printStackTrace();
+          }
+
+
           Statement s = null;
           Connection c = gp.c;
           String sql;

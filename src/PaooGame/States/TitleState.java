@@ -41,7 +41,7 @@ public class TitleState extends State{
         image = setup("/textures/menu_textures/titleScreenBackground.png");
         int x = 0;
         int y = 0;
-        g.drawImage(image, x, y - 45, 480 * 3 + 100, 272 * 3 + 100, null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
         spriteCounter++;
         if (spriteCounter >= 3) {
             switch (spriteNumber) {
@@ -62,7 +62,7 @@ public class TitleState extends State{
                 image = start2;
                 break;
         }
-        g.drawImage(image, x, y - 45, 480 * 3 + 100, 272 * 3 + 100, null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
         spriteCounter2++;
         if (spriteCounter2 >= 1) {
             switch (spriteNumber2) {
@@ -83,27 +83,27 @@ public class TitleState extends State{
                 image = fly2;
                 break;
         }
-        g.drawImage(image, x, y - 45, 480 * 3 + 100, 272 * 3 + 100, null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
         image = setup("/textures/menu_textures/isaacLogo.png");
-        g.drawImage(image, x, y - 45, 480 * 3 + 100, 272 * 3 + 100, null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
     }
     public void drawTitleScreenState1(){
         image=setup("/textures/menu_textures/titleScreenMenu.png");
         int x=0;
         int y=0;
-        g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
         switch (commandNum){
             case 0 : {
                 image=setup("/textures/menu_textures/sageataNewRun.png");
-                g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+                g.drawImage(image, x, y, gp.width, gp.height, null);
             } break;
             case 1 : {
                 image=setup("/textures/menu_textures/sageataContinue.png");
-                g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+                g.drawImage(image, x, y, gp.width, gp.height, null);
             } break;
             case 2 : {
                 image=setup("/textures/menu_textures/sageataOptions.png");
-                g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+                g.drawImage(image, x, y, gp.width, gp.height, null);
             } break;
         }
     }
@@ -111,12 +111,12 @@ public class TitleState extends State{
         image=setup("/textures/menu_textures/characterMenuBackground.png");
         int x=0;
         int y=0;
-        g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
         switch (gp.personaj){
             case 0 : image=setup("/textures/menu_textures/characterIsaac.png"); break;
 
             case 1 : image=setup("/textures/menu_textures/characterAzazel.png"); break;
         }
-        g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
     }
 }

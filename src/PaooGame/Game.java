@@ -119,7 +119,8 @@ public class Game extends JPanel implements Runnable
 
 
     public Connection c = null;
-
+    public int height;
+    public int width;
     public Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
@@ -152,7 +153,6 @@ public class Game extends JPanel implements Runnable
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:bazadedate.db");
-//            c.setAutoCommit(false);
             s=c.createStatement();
             String sql = null;
             try {
@@ -170,28 +170,12 @@ public class Game extends JPanel implements Runnable
                         "\t\"nivelTerminat\"\tINTEGER,\n" +
                         "\tPRIMARY KEY(\"ID\")\n" +
                         ");";
-                System.out.println("TABLE CREATE PLAYER" + s.execute(sql));
+                System.out.println("Tabela player a fost creeata cu succes ! ");
+                s.execute(sql);
             }
-            catch (Exception e){
-//                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            catch (Exception e) {
                 System.out.println("Tabela player a fost deja creata");
             }
-            try {
-                sql = "CREATE TABLE \"monstri\" (\n" +
-                        "\t\"ID\"\tINTEGER,\n" +
-                        "\t\"x\"\tINTEGER,\n" +
-                        "\t\"y\"\tINTEGER,\n" +
-                        "\t\"health\"\tINTEGER,\n" +
-                        "\t\"name\"\tTEXT,\n" +
-                        "\tPRIMARY KEY(\"ID\")\n" +
-                        ");";
-                System.out.println("TABLE CREATE PLAYER" + s.execute(sql));
-            }
-            catch (Exception e){
-                // System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-                System.out.println("Tabela monstri a fost deja creata");
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,10 +191,15 @@ public class Game extends JPanel implements Runnable
     }
     private void InitGame() {
         tileSize = 48;
+        Dimension size =  Toolkit.getDefaultToolkit().getScreenSize();
+        width = (int)size.getWidth();
+        height = (int)size.getHeight();
+
         //cols=15;
         //rows=13;
-        wnd = new GameWindow("The binding of isaac", screenWidth, screenHeight);
+//        wnd = new GameWindow("The binding of isaac", screenWidth, screenHeight);
 
+        wnd = new GameWindow("The binding of isaac", width, height);
         /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
         /// Se incarca toate elementele grafice (dale)

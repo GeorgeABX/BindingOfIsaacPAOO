@@ -49,19 +49,19 @@ public class PauseState extends State{
         image=setup("/textures/menu_textures/pause/pauseMenu.png");
         int x=0;
         int y=0;
-        g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+        g.drawImage(image, x, y, gp.width, gp.height, null);
         switch (pauseCom){
             case 0 : {
                 image=setup("/textures/menu_textures/pause/sageataOption.png");
-                g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+                g.drawImage(image, x, y, gp.width, gp.height, null);
             } break;
             case 1 : {
                 image=setup("/textures/menu_textures/pause/sageataResume.png");
-                g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+                g.drawImage(image, x, y, gp.width, gp.height, null);
             } break;
             case 2 : {
                 image=setup("/textures/menu_textures/pause/sageataExit.png");
-                g.drawImage(image,x,y-45,480*3+100,272*3+100,null);
+                g.drawImage(image, x, y, gp.width, gp.height, null);
             } break;
         }
     }

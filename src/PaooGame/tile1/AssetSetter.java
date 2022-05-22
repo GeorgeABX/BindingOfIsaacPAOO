@@ -74,7 +74,7 @@ public class AssetSetter {
         }
     }
     public void setBasement(){
-        int kk=-1;
+        int k=-1,j=-1;
         switch (gp.camera){
             case 0 -> {
 
@@ -95,10 +95,9 @@ public class AssetSetter {
 
             }
             case 1 ->{
-                int k=-1;
-                for(int j=0;j<initialBsm[gp.camera].length;j++){
+                for(int i=0;i<initialBsm[gp.camera].length;i++){
                     if(initialBsm[gp.camera]!=null){
-                        gp.obj[++k]=initialBsm[gp.camera][j];
+                        gp.obj[++k]=initialBsm[gp.camera][i];
                     }
                 }
              //   gp.obj[++k]=setupObj("key",5*48+30,gp.actualScreenHeight/2-50);
@@ -115,12 +114,11 @@ public class AssetSetter {
                 gp.obj[k].x=gp.actualScreenWidth/2-gp.obj[k].entityWidth/2;
                 gp.obj[k].y=gp.actualScreenHeight/2-gp.obj[k].entityHeight/2;
                 if(gp.nivelTerminat==0 && gp.tileM.nivComplet[gp.camera]==0) {
-                    gp.monsters[++k]=setupMonster("gaper",13*48,8*48);
+                    gp.monsters[++j]=setupMonster("gaper",13*48,8*48);
 
                 }
             }
             case 2 -> {
-                int k=-1;
                 gp.obj[++k]=setupObj("fire",5*48+10,13*48-20);
                 gp.obj[++k]=setupObj("fire",5*48+10,2*48);
                 gp.obj[++k]=setupObj("fire",25*48,2*48);
@@ -144,7 +142,6 @@ public class AssetSetter {
                 }
             }
             case 3 -> {
-                int k=-1;
                 gp.obj[++k]=setupObj("fire",6*48+10,12*48-20);
                 gp.obj[++k]=setupObj("fire",6*48+10,3*48);
                 gp.obj[++k]=setupObj("fire",24*48,3*48);
@@ -152,7 +149,6 @@ public class AssetSetter {
             }
             //shop room
             case 17 -> {
-                int k=-1;
                 gp.obj[++k]=setupObj("shop_key",gp.actualScreenWidth/2-150-18,gp.actualScreenHeight/2-100);
                 gp.obj[++k]=setupObj("shop_heart",gp.actualScreenWidth/2+150-18,gp.actualScreenHeight/2-100);
             }
@@ -167,20 +163,32 @@ public class AssetSetter {
 
             }
             case 6 -> {
-                int k=-1;
-                gp.obj[++kk]=setupObj("basementRockBig",gp.actualScreenWidth/2-100-60,gp.actualScreenHeight/4-100);
-                gp.obj[++kk]=setupObj("basementRockBig",gp.actualScreenWidth/2+100-60,gp.actualScreenHeight/4-100);
-                gp.obj[++kk]=setupObj("basementRockSmall",gp.actualScreenWidth/2-100-60-60*2+27*2+27/2,gp.actualScreenHeight/4-100);
-                gp.obj[++kk]=setupObj("basementRockSmall",gp.actualScreenWidth/2+100-60+60*2,gp.actualScreenHeight/4-100);
-                gp.obj[++kk]=setupObj("basementRockSmall",gp.actualScreenWidth/2-100-60-60*2+27*2+27/2-27*2,gp.actualScreenHeight/4-100);
-                gp.obj[++kk]=setupObj("basementRockSmall",gp.actualScreenWidth/2+100-60+60*2+27*2,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("basementRockBig",gp.actualScreenWidth/2-100-60,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("basementRockBig",gp.actualScreenWidth/2+100-60,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("basementRockSmall",gp.actualScreenWidth/2-100-60-60*2+27*2+27/2,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("basementRockSmall",gp.actualScreenWidth/2+100-60+60*2,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("basementRockSmall",gp.actualScreenWidth/2-100-60-60*2+27*2+27/2-27*2,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("basementRockSmall",gp.actualScreenWidth/2+100-60+60*2+27*2,gp.actualScreenHeight/4-100);
+                gp.obj[++k]=setupObj("fire",5*48+10,13*48-20);
+                gp.obj[++k]=setupObj("fire",5*48+10,2*48);
+                gp.obj[++k]=setupObj("fire",25*48,2*48);
+                gp.obj[++k]=setupObj("fire",25*48,13*48-20);
+                if(gp.nivelTerminat==0 && gp.tileM.nivComplet[gp.camera]==0) {
+                    gp.monsters[++j]=setupMonster("basic_fly",13*48,8*48);
+                    gp.monsters[++j]=setupMonster("basic_fly",16*48,9*48);
+
+                }
             }
             case 7 -> {
+                if(gp.nivelTerminat==0 && gp.tileM.nivComplet[gp.camera]==0) {
+                    gp.monsters[++k]=setupMonster("charger",13*48,8*48);
+                    gp.monsters[++k]=setupMonster("sucker",16*48,9*48);
+                    gp.monsters[++k]=setupMonster("sucker",17*48,9*48);
 
+                }
             }
             //item room
             case 18 -> {
-                int k=-1;
                 gp.obj[++k]=setupObj("gold_chest",gp.actualScreenWidth/2,gp.actualScreenHeight/2);
             }
         }
